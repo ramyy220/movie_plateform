@@ -24,7 +24,9 @@ def create_app():
     
     # Importer et enregistrer les blueprints
     from routes.auth import auth_bp
+    from routes.movie import movies_bp
     app.register_blueprint(auth_bp)
+    app.register_blueprint(movies_bp)
     
     # Créer les tables
     with app.app_context():
