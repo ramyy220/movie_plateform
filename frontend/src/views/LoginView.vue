@@ -1,5 +1,5 @@
 <template>
-     <div class="auth.container">
+     <div class="auth-container">
         <div class="auth-card">
             <h1> Connectez-vous à Movie plateforme 🎬</h1>
             <form @submit.prevent="handleLogin">
@@ -63,99 +63,111 @@ const handleLogin = async () => {
     }
 };
 </script>
+
 <style scoped>
-.auth-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 80vh;
+/* dark / glassy auth styles — use project variables */
+.auth-container{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  min-height: calc(100vh - 120px);
   padding: 20px;
 }
 
-.auth-card {
-  background: white;
-  padding: 40px;
-  border-radius: 12px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  width: 100%;
-  max-width: 400px;
+.auth-card{
+  width:100%;
+  max-width:420px;
+  padding:32px;
+  border-radius:12px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+  border: 1px solid rgba(255,255,255,0.04);
+  box-shadow: 0 12px 36px rgba(2,6,23,0.6);
+  color: #eaf3ff;
+  backdrop-filter: blur(6px);
 }
 
-.auth-card h1 {
-  text-align: center;
-  margin-bottom: 30px;
-  color: #333;
+.auth-card h1{
+  margin:0 0 18px;
+  text-align:center;
+  color: #fff;
+  font-weight:700;
+  font-size:1.05rem;
 }
 
 .form-group {
-  margin-bottom: 20px;
-}
-
-.form-group label {
-  display: block;
-  margin-bottom: 8px;
-  font-weight: 500;
-  color: #555;
-}
-
-.form-group input {
-  width: 100%;
-  padding: 12px;
-  border: 1px solid #ddd;
-  border-radius: 6px;
-  font-size: 16px;
-  transition: border-color 0.3s;
-}
-
-.form-group input:focus {
-  outline: none;
-  border-color: #4CAF50;
-}
-
-.btn-primary {
-  width: 100%;
-  padding: 14px;
-  background-color: #4CAF50;
-  color: white;
-  border: none;
-  border-radius: 6px;
-  font-size: 16px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background-color 0.3s;
-}
-
-.btn-primary:hover:not(:disabled) {
-  background-color: #45a049;
-}
-
-.btn-primary:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
-
-.error-message {
-  background-color: #fee;
-  color: #c33;
-  padding: 12px;
-  border-radius: 6px;
-  margin-bottom: 20px;
-  text-align: center;
-}
-
-.auth-footer {
-  text-align: center;
-  margin-top: 20px;
-  color: #666;
-}
-
-.auth-footer a {
-  color: #4CAF50;
-  text-decoration: none;
-  font-weight: 600;
-}
-
-.auth-footer a:hover {
-  text-decoration: underline;
-}
+   margin-bottom: 20px;
+ }
+ 
+ .form-group label {
+  display:block;
+  margin-bottom:8px;
+  font-weight:600;
+  color: var(--muted);
+ }
+ 
+ .form-group input {
+  width:100%;
+  padding:12px 14px;
+  border-radius:10px;
+  border:1px solid rgba(255,255,255,0.04);
+  background: rgba(0,0,0,0.25);
+  color: #eaf3ff;
+  font-size:15px;
+  transition: box-shadow .14s, border-color .14s;
+ }
+ 
+ .form-group input:focus {
+  outline:none;
+  border-color: var(--accent-2);
+  box-shadow: 0 6px 24px rgba(124,92,255,0.08);
+ }
+ 
+ .btn-primary {
+  width:100%;
+  padding:12px 14px;
+  border-radius:999px;
+  background: #534a61;
+  border:none;
+  color:#fff;
+  font-weight:700;
+  font-size:15px;
+  cursor:pointer;
+  box-shadow: 0 10px 30px rgba(124,92,255,0.12);
+  transition: transform .12s, opacity .12s;
+ }
+ 
+ .btn-primary:hover:not(:disabled) {
+  transform: translateY(-3px);
+ }
+ 
+ .btn-primary:disabled {
+   opacity: 0.6;
+   cursor: not-allowed;
+ }
+ 
+ .error-message {
+  background: rgba(255,90,90,0.08);
+  color: #ffb3b3;
+  padding:10px;
+  border-radius:8px;
+  margin-bottom:12px;
+  text-align:center;
+  border: 1px solid rgba(255,90,90,0.06);
+ }
+ 
+ .auth-footer {
+   text-align: center;
+   margin-top: 20px;
+   color: var(--muted);
+ }
+ 
+ .auth-footer a {
+  color: #534a61;
+  text-decoration:none;
+  font-weight:700;
+ }
+ 
+ .auth-footer a:hover {
+   text-decoration: underline;
+ }
 </style>

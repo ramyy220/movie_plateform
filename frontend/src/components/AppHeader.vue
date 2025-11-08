@@ -33,61 +33,79 @@ const handleLogout = async () => {
 </script>
 
 <style scoped>
-.app-header {
-  background-color: #333;
-  color: white;
-  padding: 1rem 0;
+.app-header{
+  position:sticky;
+  top:0;
+  z-index:60;
+  padding:0.6rem 0;
+  background: linear-gradient(180deg, rgba(255,255,255,0.02), transparent 60%);
+  backdrop-filter: blur(8px);
+  border-bottom:1px solid rgba(255,255,255,0.03);
 }
 
-.container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 20px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+.container{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:1rem;
 }
 
-.logo {
-  font-size: 1.5rem;
-  font-weight: bold;
-  color: white;
-  text-decoration: none;
+/* Logo */
+.logo{
+  display:inline-flex;
+  align-items:center;
+  gap:0.6rem;
+  font-weight:700;
+  font-size:1.05rem;
+  color: #fff;
+  padding:0.25rem 0.5rem;
+  border-radius:8px;
 }
 
-nav {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
+/* Nav on the right */
+nav{
+  display:flex;
+  align-items:center;
+  gap:0.75rem;
 }
 
-.welcome {
-  color: #4CAF50;
+/* Welcome text */
+.welcome{
+  color:var(--muted);
+  font-weight:600;
+  margin-right:0.5rem;
+  font-size:0.95rem;
 }
 
-.btn-link, .btn-logout {
-  padding: 0.5rem 1rem;
-  color: white;
-  text-decoration: none;
-  border-radius: 4px;
-  transition: background-color 0.3s;
+/* Links in header */
+.btn-link{
+  padding:0.45rem 0.7rem;
+  border-radius:999px;
+  color:var(--muted);
+  background:transparent;
+  border:1px solid transparent;
+  transition: color .12s, transform .12s;
 }
+.btn-link:hover{ color:#fff; transform:translateY(-2px) }
 
-.btn-link {
-  background-color: #4CAF50;
+/* Logout button */
+.btn-logout{
+  background: #534a61;
+  border:none;
+  color:#fff;
+  padding:0.45rem 0.75rem;
+  border-radius:999px;
+  font-weight:700;
+  cursor:pointer;
+  box-shadow: 0 8px 24px rgba(124,92,255,0.12);
 }
+.btn-logout:hover{ transform:translateY(-3px) }
 
-.btn-link:hover {
-  background-color: #45a049;
-}
-
-.btn-logout {
-  background-color: #f44336;
-  border: none;
-  cursor: pointer;
-}
-
-.btn-logout:hover {
-  background-color: #da190b;
+/* Small screens: compact header */
+@media (max-width:520px){
+  .welcome{ display:none }
+  .logo{ font-size:0.98rem }
+  nav{ gap:0.5rem }
 }
 </style>
+
