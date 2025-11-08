@@ -10,7 +10,16 @@ def create_app():
     
     # Initialiser les extensions
     db.init_app(app)
-    CORS(app)
+    
+    # Configuration CORS plus permissive
+    CORS(app, resources={
+        r"/*": {
+            "origins": "*",
+            "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+            "allow_headers": ["Content-Type", "Authorization"]
+        }
+    })
+    
     JWTManager(app) 
     
     # Importer et enregistrer les blueprints
@@ -35,4 +44,4 @@ def create_app():
 
 if __name__ == '__main__':
     app = create_app()
-    app.run(debug=True, port=5000)
+    app.run(debug=True, port=5000, host='0.0.0.0')
