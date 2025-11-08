@@ -13,6 +13,10 @@ def create_app():
     CORS(app)
     JWTManager(app) 
     
+    # Importer et enregistrer les blueprints
+    from routes.auth import auth_bp
+    app.register_blueprint(auth_bp)
+    
     # Créer les tables
     with app.app_context():
         db.create_all()
