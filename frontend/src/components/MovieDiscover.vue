@@ -1,35 +1,38 @@
 <template>
-  <section class="discover">
-    <h2>Découvertes</h2>
-
-    <div v-if="loading" class="loading">Chargement...</div>
-    <div v-if="error" class="error">{{ error }}</div>
-
-    <div v-if="movies.length" class="grid">
-      <article v-for="m in movies" :key="m.id" class="card">
-        <img
-          :src="posterUrl(m.poster_path)"
-          :alt="m.title"
-          class="poster"
-          loading="lazy"
-        />
-        <div class="meta">
-          <h3 class="title">{{ m.title }}</h3>
-          <div class="info">
-                        <span class="rating">⭐ {{ m.vote_average ?? '—' }}</span>
-                    </div>
-          <p class="info">{{ m.release_date ? m.release_date.slice(0,4) : '—' }}</p>
-        </div>
-      </article>
-    </div>
-
-    <button v-if="!loading && page < total_pages" @click="loadMore" class="more">
-      Charger plus
-    </button>
+  <div class="layout">
     <aside class="sidebar">
-        <FilterMovie v-model="filter" />
+      <FilterMovie v-model="filter" />
     </aside>
-  </section>
+
+    <section class="discover">
+      <h2>Découvertes</h2>
+
+      <div v-if="loading" class="loading">Chargement...</div>
+      <div v-if="error" class="error">{{ error }}</div>
+
+      <div v-if="movies.length" class="grid">
+        <article v-for="m in movies" :key="m.id" class="card">
+          <img
+            :src="posterUrl(m.poster_path)"
+            :alt="m.title"
+            class="poster"
+            loading="lazy"
+          />
+          <div class="meta">
+            <h3 class="title">{{ m.title }}</h3>
+            <div class="info">
+              <span class="rating">⭐ {{ m.vote_average ?? '—' }}</span>
+            </div>
+            <p class="info">{{ m.release_date ? m.release_date.slice(0,4) : '—' }}</p>
+          </div>
+        </article>
+      </div>
+
+      <button v-if="!loading && page < total_pages" @click="loadMore" class="more">
+        Charger plus
+      </button>
+    </section>
+  </div>
 </template>
 
 <script setup>
@@ -71,7 +74,6 @@ async function fetchMovies(p = 1) {
     } else if (filter.value === 'upcoming') {
       data = await movieUpcoming({ page: p, count: props.count })
     } else {
-    
       data = await discoverMovies({ page: p, count: props.count })
     }
 
@@ -107,17 +109,26 @@ onMounted(() => {
 </script>
 
 <style scoped>
-.discover {
-  width: 100%;
-  margin: 24px 50px 24px 300px; 
+.layout {
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+  padding: 20px;
   box-sizing: border-box;
 }
+
+.discover {
+  flex: 1;
+  width: 100%;
+  margin: 0;
+  box-sizing: border-box;
+}
+
 .grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 25px;
   margin-top: 16px;
-  margin-right: 350px;
 }
 
 .card {
@@ -191,16 +202,35 @@ onMounted(() => {
   cursor: pointer;
   transition: background-color 0.3s ease;
 }
+
 .sidebar {
-  position: fixed;
-  top: 300px;
-  left: 20px;
-  width: 250px;
-  padding: 18px;
+  position: relative;
+  width: 270px;
+  padding: 15px;
   background: #1e1e2f;
   border-radius: 12px;
   box-shadow: 0 8px 28px rgba(2,6,23,0.45);
+  margin: 0;
+  margin-top: 20px;
 }
+
+@media (max-width: 900px) {
+  .layout {
+    flex-direction: column;
+    gap: 16px;
+  }
+  .grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  .poster {
+    width: 92px;
+    height: 138px;
+  }
+  .discover {
+    margin-left: 0;
+  }
+}
+
 @media (max-width: 600px) {
   .search-bar {
     flex-direction: column;
@@ -210,24 +240,8 @@ onMounted(() => {
     width: 74px;
     height: 112px;
   }
-  .discover {
-    margin-left: 0; 
-  }
   .grid {
     grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-@media (max-width: 900px) {
-  .grid {
-    grid-template-columns: repeat(3, 1fr);
-  }
-  .poster {
-    width: 92px;
-    height: 138px;
-  }
-  .discover {
-    margin-left: 200px;
   }
 }
 </style>
