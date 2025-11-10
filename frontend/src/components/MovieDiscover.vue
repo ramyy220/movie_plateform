@@ -15,6 +15,9 @@
         />
         <div class="meta">
           <h3 class="title">{{ m.title }}</h3>
+          <div class="info">
+                        <span class="rating">⭐ {{ m.vote_average ?? '—' }}</span>
+                    </div>
           <p class="info">{{ m.release_date ? m.release_date.slice(0,4) : '—' }}</p>
         </div>
       </article>

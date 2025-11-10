@@ -1,6 +1,6 @@
 <template>
   <header class="app-header">
-    <div class="container">
+    <div class="container" @click="handlehome">
       <router-link to="/" class="logo">
         🎬 Movie Platform
       </router-link>
@@ -29,6 +29,9 @@ const authStore = useAuthStore();
 const handleLogout = async () => {
   await authStore.logout();
   router.push('/login');
+};
+const handlehome = () => {
+  router.push('/');
 };
 </script>
 
