@@ -12,3 +12,14 @@ def search_movies(query):
     }
     response = requests.get(url, params=params)
     return response.json()
+
+def get_movie_discover(page: int = 1):
+    url = "https://api.themoviedb.org/3/discover/movie"
+    params = {
+        "api_key": TMDB_API_KEY,
+        "language": "fr-FR",
+        "page": page
+    }
+    response = requests.get(url, params=params)
+    return response.json()
+
