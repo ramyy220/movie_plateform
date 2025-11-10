@@ -15,7 +15,7 @@
                 />
                 <div class="meta">
                     <h3 class="title">{{ movie.title }}</h3>
-                    <p class="overview">{{ movie.overview || 'Pas de synopsis disponible.' }}</p>
+                    <p class="overview">{{ movie.overview }}</p>
                     <div class="info">
                         <span class="rating">⭐ {{ movie.vote_average ?? '—' }}</span>
                         <span class="date">{{ movie.release_date ?? 'N/A' }}</span>
@@ -47,7 +47,7 @@ const search = async () => {
 .search-container {
   max-width: 1100px;
   margin: 24px auto;
-  padding: 20px;
+  padding: 25px;
   box-sizing: border-box;
 }
 
@@ -60,12 +60,12 @@ const search = async () => {
 
 .search-input {
   flex: 1;
-  padding: 12px 14px;
-  border-radius: 10px;
+  padding: 15px 25px;
+  border-radius: 15px;
   border: 1px solid rgba(255,255,255,0.06);
   background: rgba(0,0,0,0.28);
   color: #eaf3ff;
-  font-size: 15px;
+  font-size: 18px;
   transition: box-shadow .12s, border-color .12s, transform .08s;
 }
 
@@ -83,11 +83,12 @@ const search = async () => {
 /* Button */
 .btn-primary {
   padding: 11px 16px;
-  border-radius: 999px;
-  background: linear-gradient(180deg, #6f5bd6, #4a3c92);
+  border-radius: 15px;
+  background: linear-gradient(180deg, #5a47b7, #4a3c92);
   border: none;
   color: #fff;
-  font-weight: 700;
+  font-weight: 900;
+  font-size: 18px;
   cursor: pointer;
   box-shadow: 0 10px 30px rgba(79,64,154,0.18);
   transition: transform .12s, opacity .12s;
@@ -111,11 +112,10 @@ const search = async () => {
 
 .movie-card {
   display: flex;
-  gap: 16px;
-  align-items: stretch;
-  padding: 18px;
+  gap: 15px;
+  padding: 24px;
   border-radius: 12px;
-  background: linear-gradient(180deg, rgba(255,255,255,0.015), rgba(255,255,255,0.01));
+  background: #2a293a;
   border: 1px solid rgba(255,255,255,0.03);
   box-shadow: 0 8px 28px rgba(2,6,23,0.45);
   color: #eaf3ff;
@@ -135,7 +135,7 @@ const search = async () => {
 .meta {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 12px;
   overflow: hidden;
 }
 
@@ -145,17 +145,17 @@ const search = async () => {
   font-weight: 700;
   color: #fff;
   line-height: 1.15;
-  white-space: nowrap;
+  white-space: normal;
   text-overflow: ellipsis;
   overflow: hidden;
 }
 
 .overview {
   margin: 0;
-  font-size: 0.88rem;
+  font-size: 1rem;
   color: rgba(234,243,255,0.78);
-  line-height: 1.3;
-  max-height: 3.3em;
+  line-height: 2rem;
+  max-height: 6rem;
   overflow: hidden;
   text-overflow: ellipsis;
 }
