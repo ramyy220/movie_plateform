@@ -5,6 +5,11 @@
             <button class="btn-primary" @click="search">Rechercher</button>
         </div>
 
+        <div v-if="searched">
+          <button class="back" @click="handleback" ><svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+              <path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg></button>
+        </div>
         <div class="results">
             <div v-for="movie in movies" :key="movie.id" class="movie-card">
                 <img
@@ -32,9 +37,17 @@ import { searchMovies } from '../services/searchService';
 
 const query = ref('');
 const movies = ref([]);
+const searched = ref(false);
+
+const handleback = () => {
+    movies.value = [];
+    query.value = '';
+    searched.value = false; 
+};
 
 const search = async () => {
     if (!query.value) return;
+    searched.value = true;
     try {
         movies.value = await searchMovies(query.value);
     } catch (error) {
@@ -180,6 +193,28 @@ const search = async () => {
   font-weight: 700;
 }
 
+.back {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  background: linear-gradient(180deg, #5a47b7, #4a3c92);
+  border: 1px solid rgba(255,255,255,0.04);
+  color: #eaf3ff;
+  cursor: pointer;
+  margin-bottom: 12px;
+  padding: 6px;
+}
+.back:hover {
+  background: rgba(124,92,255,0.12);
+  transform: translateY(-2px);
+}
+.back svg {
+  display: block;
+}
+
 @media (max-width: 600px) {
   .search-bar {
     flex-direction: column;
@@ -188,6 +223,10 @@ const search = async () => {
   .poster {
     width: 74px;
     height: 112px;
+  }
+  .back {
+    width: 50px;
+    height: 50px;
   }
 }
 
