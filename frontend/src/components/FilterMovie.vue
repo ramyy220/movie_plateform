@@ -23,9 +23,9 @@ export default {
     filters: {
       type: Array,
       default: () => [
-        { key: 'now_playing', label: 'Now Playing' },
+        { key: 'now_playing', label: 'À l\'affiche' },
         { key: 'popular', label: 'Populaire' },
-        { key: 'top_rated', label: 'Top Rated' },
+        { key: 'top_rated', label: 'Les mieux notés' },
         { key: 'upcoming', label: 'À venir' }
       ]
     }

@@ -5,7 +5,7 @@
     </aside>
 
     <section class="discover">
-      <h2>Découvertes</h2>
+      <h2>{{ titlePage }}</h2>
 
       <div v-if="loading" class="loading">Chargement...</div>
       <div v-if="error" class="error">{{ error }}</div>
@@ -52,6 +52,7 @@ const loading = ref(false)
 const error = ref(null)
 
 const filter = ref(null)
+const titlePage = ref("")
 
 const TMDB_IMG = 'https://image.tmdb.org/t/p/w342'
 
@@ -67,14 +68,19 @@ async function fetchMovies(p = 1) {
     // si le filtre est now_playing, utiliser nowplayingMovies
     if (filter.value === 'now_playing') {
       data = await nowplayingMovies({ page: p, count: props.count })
+      titlePage.value = "Films à l'affiche"
     } else if (filter.value === 'popular') {
       data = await moviePopular({ page: p, count: props.count })
+      titlePage.value = "Films populaires"
     } else if (filter.value === 'top_rated') {
       data = await movieTopRated({ page: p, count: props.count })
+      titlePage.value = "Films les mieux notés"
     } else if (filter.value === 'upcoming') {
       data = await movieUpcoming({ page: p, count: props.count })
+      titlePage.value = "Films à venir"
     } else {
       data = await discoverMovies({ page: p, count: props.count })
+      titlePage.value = "Découvertes"
     }
 
     if (data.results) {
