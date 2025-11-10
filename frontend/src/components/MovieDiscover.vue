@@ -26,12 +26,16 @@
     <button v-if="!loading && page < total_pages" @click="loadMore" class="more">
       Charger plus
     </button>
+    <aside class="sidebar">
+        <FilterMovie v-model="filter" />
+    </aside>
   </section>
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
-import { discoverMovies } from '../services/movieService' 
+import { ref, onMounted, watch } from 'vue'
+import { discoverMovies, nowplayingMovies, moviePopular, movieTopRated, movieUpcoming } from '../services/movieService' 
+import FilterMovie from './FilterMovie.vue'
 
 const props = defineProps({
   count: { type: Number, default: 12 },
@@ -44,17 +48,33 @@ const total_pages = ref(1)
 const loading = ref(false)
 const error = ref(null)
 
+const filter = ref(null)
+
 const TMDB_IMG = 'https://image.tmdb.org/t/p/w342'
 
 function posterUrl(path) {
   return path ? (TMDB_IMG + path) : '/img/no-poster.png'
 }
 
-async function fetchDiscover(p = 1) {
+async function fetchMovies(p = 1) {
   loading.value = true
   error.value = null
   try {
-    const data = await discoverMovies({ page: p, count: props.count }) 
+    let data
+    // si le filtre est now_playing, utiliser nowplayingMovies
+    if (filter.value === 'now_playing') {
+      data = await nowplayingMovies({ page: p, count: props.count })
+    } else if (filter.value === 'popular') {
+      data = await moviePopular({ page: p, count: props.count })
+    } else if (filter.value === 'top_rated') {
+      data = await movieTopRated({ page: p, count: props.count })
+    } else if (filter.value === 'upcoming') {
+      data = await movieUpcoming({ page: p, count: props.count })
+    } else {
+    
+      data = await discoverMovies({ page: p, count: props.count })
+    }
+
     if (data.results) {
       if (p === 1) movies.value = data.results
       else movies.value = movies.value.concat(data.results)
@@ -72,12 +92,17 @@ async function fetchDiscover(p = 1) {
 
 function loadMore() {
   if (page.value >= total_pages.value) return
-  fetchDiscover(page.value + 1)
+  fetchMovies(page.value + 1)
 }
+
+watch(filter, () => {
+  page.value = 1
+  fetchMovies(1)
+})
 
 onMounted(() => {
   console.debug('[MovieDiscover] mounting, initial page =', page.value)
-  fetchDiscover(page.value)
+  fetchMovies(page.value)
 })
 </script>
 
@@ -166,6 +191,16 @@ onMounted(() => {
   cursor: pointer;
   transition: background-color 0.3s ease;
 }
+.sidebar {
+  position: fixed;
+  top: 300px;
+  left: 20px;
+  width: 250px;
+  padding: 18px;
+  background: #1e1e2f;
+  border-radius: 12px;
+  box-shadow: 0 8px 28px rgba(2,6,23,0.45);
+}
 @media (max-width: 600px) {
   .search-bar {
     flex-direction: column;
@@ -192,7 +227,7 @@ onMounted(() => {
     height: 138px;
   }
   .discover {
-    margin-left: 200px; /* Espace réduit sur tablettes */
+    margin-left: 200px;
   }
 }
 </style>

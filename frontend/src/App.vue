@@ -25,11 +25,19 @@ onMounted(() => {
     </footer>
   </div>
 </template>
-<style scoped>
+
+<style>
+html, body {
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+}
+
 #app {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  overflow-x: hidden;
 }
 
 .main-content {
