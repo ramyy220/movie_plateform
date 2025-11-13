@@ -23,7 +23,14 @@
                     <p class="overview">{{ movie.overview }}</p>
                     <div class="info">
                         <span class="rating">⭐ {{ movie.vote_average ?? '—' }}</span>
-                        <span class="date">{{ movie.release_date ?? 'N/A' }}</span>
+                        <span class="date">{{ movie.release_date ?? 'N/A' }} </span>
+                        <span>
+                          <FavoriteButton
+                            :id="movie.id"
+                            :favorite-ids="favoriteIds"
+                            @toggle="toggleFavorite"
+                          />
+                        </span>
                     </div>
                 </div>
             </div>
@@ -34,16 +41,26 @@
 <script setup>
 import { ref } from 'vue';
 import { searchMovies } from '../services/searchService';
+import FavoriteButton from './FavoriteButton.vue';
 
 const query = ref('');
 const movies = ref([]);
 const searched = ref(false);
+const favoriteIds = ref([]);
 
 const handleback = () => {
     movies.value = [];
     query.value = '';
     searched.value = false; 
 };
+
+function toggleFavorite(id) {
+  if (favoriteIds.value.includes(id)) {
+    favoriteIds.value = favoriteIds.value.filter(favId => favId !== id)
+  } else {
+    favoriteIds.value.push(id)
+  }
+}
 
 const search = async () => {
     if (!query.value) return;

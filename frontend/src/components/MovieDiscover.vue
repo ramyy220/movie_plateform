@@ -23,7 +23,14 @@
             <div class="info">
               <span class="rating">⭐ {{ m.vote_average ?? '—' }}</span>
             </div>
-            <p class="info">{{ m.release_date ? m.release_date.slice(0,4) : '—' }}</p>
+            <div class="info">
+              <p>{{ m.release_date ? m.release_date.slice(0,4) : '—' }}</p>
+              <FavoriteButton
+                :id="m.id"
+                :favorite-ids="favoriteIds"
+                @toggle="toggleFavorite"
+              />
+            </div>
           </div>
         </article>
       </div>
@@ -37,8 +44,9 @@
 
 <script setup>
 import { ref, onMounted, watch } from 'vue'
-import { discoverMovies, nowplayingMovies, moviePopular, movieTopRated, movieUpcoming } from '../services/movieService' 
+import { discoverMovies, nowplayingMovies, moviePopular, movieTopRated, movieUpcoming } from '../services/movieService'
 import FilterMovie from './FilterMovie.vue'
+import FavoriteButton from './FavoriteButton.vue'
 
 const props = defineProps({
   count: { type: Number, default: 12 },
@@ -53,6 +61,7 @@ const error = ref(null)
 
 const filter = ref(null)
 const titlePage = ref("")
+const favoriteIds = ref([])          
 
 const TMDB_IMG = 'https://image.tmdb.org/t/p/w342'
 
@@ -60,12 +69,19 @@ function posterUrl(path) {
   return path ? (TMDB_IMG + path) : '/img/no-poster.png'
 }
 
+function toggleFavorite(id) {
+  if (favoriteIds.value.includes(id)) {
+    favoriteIds.value = favoriteIds.value.filter(favId => favId !== id)
+  } else {
+    favoriteIds.value.push(id)
+  }
+}
+
 async function fetchMovies(p = 1) {
   loading.value = true
   error.value = null
   try {
     let data
-    // si le filtre est now_playing, utiliser nowplayingMovies
     if (filter.value === 'now_playing') {
       data = await nowplayingMovies({ page: p, count: props.count })
       titlePage.value = "Films à l'affiche"
@@ -109,7 +125,6 @@ watch(filter, () => {
 })
 
 onMounted(() => {
-  console.debug('[MovieDiscover] mounting, initial page =', page.value)
   fetchMovies(page.value)
 })
 </script>
@@ -148,6 +163,20 @@ onMounted(() => {
   color: #eaf3ff;
   min-height: 160px;
   overflow: hidden;
+}
+.fav-btn {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  vertical-align: middle;
+  outline: none;
+  transition: transform .2s;
+}
+
+.fav-btn:hover svg {
+  transform: scale(1.13);
+  filter: drop-shadow(0 0 3px #E53935);
 }
 
 .poster {
