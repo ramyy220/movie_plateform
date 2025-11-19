@@ -43,7 +43,6 @@ export const useAuthStore = defineStore('auth', {
         this.token = response.token
         this.isAuthenticated = true
         
-        // Sauvegarder dans localStorage
         localStorage.setItem('token', response.token)
         localStorage.setItem('user', JSON.stringify(response.user))
         
@@ -64,7 +63,6 @@ export const useAuthStore = defineStore('auth', {
         this.token = null
         this.isAuthenticated = false
         
-        // Supprimer de localStorage
         localStorage.removeItem('token')
         localStorage.removeItem('user')
       }
