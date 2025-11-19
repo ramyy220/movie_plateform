@@ -1,6 +1,6 @@
 from app import create_app
 from models import db
-from sqlalchemy import inspect, text
+from sqlalchemy import inspect, text # type: ignore
 
 app = create_app()
 with app.app_context():
@@ -12,7 +12,7 @@ with app.app_context():
         with db.engine.connect() as conn:
             result = conn.execute(text("SELECT version();"))
             version = result.fetchone()[0]
-            print(f"✅ Connexion réussie !")
+            print(f"✅ Connexion réussie !")  # noqa: F541
             print(f"📌 Version PostgreSQL : {version}")
             
             # Vérifier les tables
