@@ -67,14 +67,29 @@ export const useAuthStore = defineStore('auth', {
         },
 
         async checkAuth() {
-            if (authService.isAuthenticated()) {
-                try {
-                    const user = await authService.getCurrentUser();
-                    this.user = user;
-                    this.isAuthenticated = true;
-                } catch (error) {
-                    await this.logout();
+            this.loading = true;
+            this.error = null;
+
+            if (!authService.isAuthenticated()) {
+                this.loading = false;
+                return;
+            }
+
+            try {
+                const user = await authService.getCurrentUser();
+                this.user = user;
+                this.isAuthenticated = true;
+            } catch (error) {
+                if (error.response && error.response.status === 401) {
+                    localStorage.removeItem('access_token');
+                    localStorage.removeItem('user');
+                    this.user = null;
+                    this.isAuthenticated = false;
+                } else {
+                    console.error('checkAuth error:', error);
                 }
+            } finally {
+                this.loading = false;
             }
         }
     }

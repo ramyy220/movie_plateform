@@ -1,5 +1,6 @@
 from flask import Blueprint, request, jsonify
 from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity # type: ignore
+from flask_cors import cross_origin # type: ignore
 from models import db
 from models.user import User
 from datetime import timedelta
@@ -31,7 +32,7 @@ def register():
         db.session.commit()
 
         access_token = create_access_token(
-            identity=user.id,
+            identity=str(user.id),
             expires_delta=timedelta(days=1)
         )
 
@@ -60,7 +61,7 @@ def login():
             return jsonify({'message': 'Invalid email or password.'}), 401
 
         access_token = create_access_token(
-            identity=user.id,
+            identity=str(user.id),
             expires_delta=timedelta(days=1)
         )
 
@@ -73,11 +74,17 @@ def login():
         return jsonify({'message': 'Internal server error.', 'error': str(e)}), 500
     
 @auth_bp.route('/me', methods=['GET'])
+@cross_origin(headers=['Content-Type', 'Authorization'])
 @jwt_required() 
 def get_current_user():
     """Get the currently logged-in user."""
     try:
-        user_id = get_jwt_identity()
+        user_id_str = get_jwt_identity()
+        try:
+            user_id = int(user_id_str)
+        except (TypeError, ValueError):
+            return jsonify({'message': 'Invalid token subject.'}), 400
+
         user = User.query.get(user_id)
 
         if not user:
@@ -90,10 +97,8 @@ def get_current_user():
         return jsonify({'message': 'Internal server error.', 'error': str(e)}), 500
     
 @auth_bp.route('/logout', methods=['POST'])
+@cross_origin(headers=['Content-Type', 'Authorization'])
 @jwt_required()
 def logout():
     """User logout (handled client-side by discarding the token)."""
     return jsonify({'message': 'Logout successful. Please discard the token on the client side.'}), 200
-
-
-
