@@ -21,3 +21,6 @@ class Favorites(db.Model):
             'title': self.title,
             'poster_path': self.poster_path
         }
+        
+    def serialize(self):
+        return self.to_dict()

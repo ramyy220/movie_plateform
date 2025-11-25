@@ -47,6 +47,7 @@ import { ref, onMounted, watch } from 'vue'
 import { discoverMovies, nowplayingMovies, moviePopular, movieTopRated, movieUpcoming } from '../services/movieService'
 import FilterMovie from './FilterMovie.vue'
 import FavoriteButton from './FavoriteButton.vue'
+import { addFavorite, removeFavorite, getFavorites } from '../services/favService'
 
 const props = defineProps({
   count: { type: Number, default: 12 },
@@ -69,11 +70,24 @@ function posterUrl(path) {
   return path ? (TMDB_IMG + path) : '/img/no-poster.png'
 }
 
-function toggleFavorite(id) {
-  if (favoriteIds.value.includes(id)) {
-    favoriteIds.value = favoriteIds.value.filter(favId => favId !== id)
-  } else {
-    favoriteIds.value.push(id)
+async function toggleFavorite(id) {
+  try {
+    const movie = movies.value.find(m => m.id === id)
+    if (!movie) return
+
+    if (favoriteIds.value.includes(id)) {
+      await removeFavorite(id)
+      favoriteIds.value = favoriteIds.value.filter(favId => favId !== id)
+    } else {
+      await addFavorite({
+        movie_id: id,
+        title: movie.title,
+        poster_path: movie.poster_path
+      })
+      favoriteIds.value.push(id)
+    }
+  } catch (err) {
+    console.error('favorite toggle error', err)
   }
 }
 
@@ -125,7 +139,12 @@ watch(filter, () => {
 })
 
 onMounted(() => {
-  fetchMovies(page.value)
+  fetchMovies()
+  getFavorites().then(data => {
+    favoriteIds.value = data.map(fav => fav.movie_id)
+  }).catch(err => {
+    console.error('Failed to load favorites', err)
+  })
 })
 </script>
 
