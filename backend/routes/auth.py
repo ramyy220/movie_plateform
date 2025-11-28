@@ -102,3 +102,26 @@ def get_current_user():
 def logout():
     """User logout (handled client-side by discarding the token)."""
     return jsonify({'message': 'Logout successful. Please discard the token on the client side.'}), 200
+
+@auth_bp.route('/verify-password', methods=['POST'])
+@cross_origin(headers=['Content-Type', 'Authorization'])
+@jwt_required()
+def verify_password():
+    try: 
+        data = request.get_json()
+        if not data or not data.get('password'):
+            return jsonify({'message': 'Password is requerid.'}) , 400
+        
+        user_id_str = get_jwt_identity()
+        try:
+            user_id = int(user_id_str)
+        except (TypeError, ValueError):
+            return jsonify({'message': 'Invalid token subject.'}), 400
+        
+        user = User.query.get(user_id)
+        if not user or not user.check_password(data['password']):
+            return jsonify({'message': 'Invalid password.'}), 401
+        return jsonify({'message': 'Password verified successfully.'}), 200
+    except Exception as e:
+        return jsonify({'message': 'Internal server error.', 'error': str(e)}), 500
+    
