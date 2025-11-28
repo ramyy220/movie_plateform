@@ -1,22 +1,19 @@
 <template>
   <button
     class="fav-btn"
-    :aria-label="isFavorite ? 'Retirer des favoris' : 'Ajouter aux favoris'"
-    @click.stop="toggle"
+    :class="{ active: isFavorite }"
+    @click="$emit('toggle', id)"
+    :aria-pressed="isFavorite"
+    title="Ajouter / enlever des favoris"
   >
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      :fill="isFavorite ? '#E53935' : 'none'"
-      :stroke="isFavorite ? '#E53935' : '#ccc'"
-      viewBox="0 0 27 27"
-      width="25"
-      height="25"
-    >
+    <!-- simple icône coeur -->
+    <svg width="20" height="20" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
       <path
-        stroke-width="2"
-        stroke-linecap="round"
+        d="M12 21s-7.5-4.953-10-8.083C-1 8.5 3.5 3 8.5 6.5 10.7 8 12 9.5 12 9.5s1.3-1.5 3.5-3C20.5 3 25 8.5 22 12.917 19.5 16.047 12 21 12 21z"
+        :fill="isFavorite ? '#E53935' : 'none'"
+        stroke="#ffffff"
+        stroke-width="1"
         stroke-linejoin="round"
-        d="M12 21s-6-4.95-9-8.36C-.59 8.11 3.16 3.58 8.43 5.54A5.488 5.488 0 0 1 12 8.44c1.02-1.1 2.58-2.9 5.57-2.9 5.27-1.96 9.02 2.57 5.43 7.1C18 16.05 12 21 12 21z"
       />
     </svg>
   </button>
@@ -26,17 +23,13 @@
 import { computed } from 'vue'
 
 const props = defineProps({
-  id: { type: [String, Number], required: true },
-  favoriteIds: { type: Array, required: true }
+  id: { type: [Number, String], required: true },
+  favoriteIds: { type: Array, default: () => [] }
 })
 
-const emit = defineEmits(['toggle'])
-
-const isFavorite = computed(() => props.favoriteIds.includes(props.id))
-
-function toggle() {
-  emit('toggle', props.id)
-}
+const isFavorite = computed(() => {
+  return Array.isArray(props.favoriteIds) && props.favoriteIds.includes(Number(props.id))
+})
 </script>
 
 <style scoped>
@@ -47,10 +40,12 @@ function toggle() {
   cursor: pointer;
   vertical-align: middle;
   outline: none;
-  transition: transform .2s;
+  transition: transform .15s;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
-.fav-btn:hover svg {
-  transform: scale(1.13);
-  filter: drop-shadow(0 0 3px #E53935);
-}
+.fav-btn:hover { transform: scale(1.05); }
+.fav-btn svg { transition: fill .15s, filter .15s; }
+.fav-btn.active svg { filter: drop-shadow(0 0 6px rgba(229,57,53,0.7)); }
 </style>
