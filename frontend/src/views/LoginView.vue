@@ -57,7 +57,7 @@ const handleLogin = async () => {
         await authService.login(form.value.email, form.value.password);
         router.push('/');
     } catch (err) {
-        error.value = 'Échec de la connexion. Veuillez vérifier vos informations.';
+        error.value = 'Échec de la connexion. Veuillez vérifier vos informations.', err;
     } finally {
         loading.value = false;
     }

@@ -35,7 +35,7 @@ async function load() {
         const data = await getFavorites()
         movies.value = data;
     } catch (err) {
-        error.value = 'Erreur lors du chargement des favoris.';
+        error.value = 'Erreur lors du chargement des favoris.', err;
     } finally {
         loading.value = false;
     }
@@ -46,7 +46,7 @@ async function remove(movieId) {
         await removeFavorite(movieId);
         movies.value = movies.value.filter(m => m.movie_id !== movieId);
     } catch (err) {
-        error.value = 'Erreur lors de la suppression du favori.';
+        error.value = 'Erreur lors de la suppression du favori.',err;
     }
 }
 
