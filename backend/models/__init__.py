@@ -5,4 +5,4 @@ db = SQLAlchemy()
 from .user import User  # noqa: E402
 from .favorites import Favorites  # noqa: E402
 
-__all__ = ['db', 'User', 'Favorites']
+__all__ = ["db", "User", "Favorites"]

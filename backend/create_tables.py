@@ -15,9 +15,13 @@ except Exception:
     except Exception:
         # si import échoue on affiche une erreur claire
         import traceback
+
         traceback.print_exc()
 
 app = create_app()
 with app.app_context():
     db.create_all()
-    print("✅ create_all() exécuté. Metadonnées des tables enregistrées :", sorted(list(db.metadata.tables.keys())))
+    print(
+        "✅ create_all() exécuté. Metadonnées des tables enregistrées :",
+        sorted(list(db.metadata.tables.keys())),
+    )
