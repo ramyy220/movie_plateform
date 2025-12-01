@@ -40,19 +40,16 @@ jobs:
   frontend-lint:
     name: Frontend — ESLint
     runs-on: ubuntu-latest
+    container: node:20-alpine
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Use Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-          cache: 'npm'
-
       - name: Install frontend deps
         working-directory: frontend
-        run: npm ci
+        run: |
+          apk add --no-cache make gcc g++ python3
+          npm ci
 
       - name: Run ESLint (frontend)
         working-directory: frontend
